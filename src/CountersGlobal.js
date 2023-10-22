@@ -11,9 +11,9 @@ export default function CountersGlobal() {
   const [counts, setCounts] = useState({});
 
   function setCountForUid (uidString, newCount) {
-    let countsCopy = {... counts};
+    let countsCopy = {...counts};
     countsCopy[uidString] = newCount; 
-    setCounts(countsCopy)
+    setCounts(countsCopy);
   }
 
   function newCounter() {
@@ -26,6 +26,13 @@ export default function CountersGlobal() {
   function deleteCounter(uidString) {
     console.log(`deleteCounter(${uidString})`); 
     /* Implement me! */
+    // adjust state variable for counts—remove key value pair from counts using key uidString
+    // delete operator isn't the best way to do this apparently 
+    setCounts((prevState) => {
+      let stateEntries = Object.entries(prevState);
+      let entries = stateEntries.filter((pair) => pair[0] !== uidString);
+      return Object.fromEntries(entries);
+    });
   }
 
   return (
@@ -54,6 +61,12 @@ export default function CountersGlobal() {
   );
 }
 
+// note that the curly braces must go around all props of the same object. Also, each prop is an implied key value pair
+// i.e uidtring is uidString:uidString. If we want multiple objects, we could have example function
+// function addPoints({x: x1, y:y1}, {x: x2, y: y2}){
+    // return {x: x1 + x2, y: y1 + y2};
+//}
+
 function Counter( {uidString, getCount, setCount, deleteMe} ) {
   const [expanded, setExpanded] = useState(true);  
 
@@ -78,7 +91,7 @@ function Counter( {uidString, getCount, setCount, deleteMe} ) {
         <div> 
           <span className="count">{getCount()}</span>
           <button onClick={plus1}>+1</button>
-          <button onClick={reset}>->0</button>
+          <button onClick={reset}>-0</button>
           <button onClick={deleteMe}>X</button>
         </div>
       }
